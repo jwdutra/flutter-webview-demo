@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'cache_page.dart';
 import 'events_page.dart';
 import 'postmessage_page.dart';
+import 'teste_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -80,6 +81,17 @@ class HomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const EventsPage()),
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            style: styleButton,
+            child: const Text('Teste'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const WebViewExample()),
               );
             },
           ),

@@ -15,6 +15,10 @@ class _CachePageState extends State<CachePage> {
   /// Dados do storage a ser recebido por um canal javascript configurado em [_buildWebView]
   var _storage = '';
 
+  /// Url da página onde os cookies serão gerenciados
+  //final uri = Uri.parse('https://httpbin.org/forms/post');
+  final uri = Uri.parse('https://api.maisrenda.com.br/teste.html');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +56,12 @@ class _CachePageState extends State<CachePage> {
         const SizedBox(height: 30.0),
         const Text('Storage:'),
         const SizedBox(height: 30.0),
-        Text(
-          _storage,
-          textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Text(
+            _storage,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
@@ -94,35 +101,30 @@ class _CachePageState extends State<CachePage> {
 
   /// Configura e inclui o webview na página
   Widget _buildWebView() {
-    return WebView(
-      initialUrl: 'https://httpbin.org/forms/post',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) async {
-        _webViewController = webViewController;
-      },
-      javascriptChannels: <JavascriptChannel>{
-        JavascriptChannel(
-          name: 'messageHandler', // Nome do canal
-          onMessageReceived: (JavascriptMessage message) {
-            setState(() {
-              _storage = message.message != '{}'
-                  ? message.message
-                  : 'No cache included';
-            });
-          },
-        )
-      },
-    );
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'messageHandler',
+        onMessageReceived: (JavaScriptMessage message) {
+          setState(() {
+            _storage =
+                message.message != '{}' ? message.message : 'No cache included';
+          });
+        },
+      )
+      ..loadRequest(uri);
+
+    return WebViewWidget(controller: _webViewController);
   }
 
   /// Adicina dados em sessionStorage e localStorage na página web
   Future<void> _setCache() async {
-    await _webViewController.runJavascript(
+    await _webViewController.runJavaScript(
       '''
         sessionStorage.setItem("key_1", "session cache 1"); 
         sessionStorage.setItem("key_2", "session cache 2");
-        localStorage.setItem("key_3", "persistent cache 1");  
-        localStorage.setItem("key_4", "persistent cache 2");
+        localStorage.setItem("key_3", "persistent cache 3");  
+        localStorage.setItem("key_4", "persistent cache 4");
       ''',
     );
     setState(() {
@@ -132,7 +134,7 @@ class _CachePageState extends State<CachePage> {
 
   /// lê informações do cache storage da página web e retorna para o app em um javascripr channel
   void _getCache() async {
-    await _webViewController.runJavascript('''
+    await _webViewController.runJavaScript('''
         var storage = {};
         Object.keys(sessionStorage).forEach((key) => {
           storage[key] = sessionStorage.getItem(key);
@@ -146,12 +148,13 @@ class _CachePageState extends State<CachePage> {
 
   /// Limpa os dados do cache storage da página web.
   void _clearCache() async {
-    await _webViewController.runJavascript(
-      '''
-        sessionStorage.clear(); 
-        localStorage.clear();  
-      ''',
-    );
+    await _webViewController.clearLocalStorage();
+    // await _webViewController.runJavaScript(
+    //   '''
+    //     sessionStorage.clear();
+    //     localStorage.clear();
+    //   ''',
+    //);
     _getCache();
   }
 }

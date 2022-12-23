@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CookiePage extends StatefulWidget {
@@ -16,10 +13,13 @@ class _CookiePageState extends State<CookiePage> {
   late WebViewController _webViewController;
 
   /// Controller de cookies
-  final _cookieManager = CookieManager();
+  final _cookieManager = WebViewCookieManager();
 
   /// Dados do cookie a ser recebido  em [_getCookies]
   var cookies = '';
+
+  /// Url da página onde os cookies serão gerenciados
+  final uri = Uri.parse('https://httpbin.org/anything');
 
   @override
   Widget build(BuildContext context) {
@@ -99,23 +99,12 @@ class _CookiePageState extends State<CookiePage> {
   }
 
   /// Configura e inclui o webview na página
-  Widget _buildWebView() {
-    return WebView(
-      initialUrl: 'about:blank',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) async {
-        _webViewController = webViewController;
-        String fileContent =
-            await rootBundle.loadString('assets/html/blank.html');
-        _webViewController.loadUrl(
-          Uri.dataFromString(
-            fileContent,
-            mimeType: 'text/html',
-            encoding: Encoding.getByName('utf-8'),
-          ).toString(),
-        );
-      },
-    );
+  WebViewWidget _buildWebView() {
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(uri);
+
+    return WebViewWidget(controller: _webViewController);
   }
 
   /// Inclui ciookies na página web
@@ -137,8 +126,6 @@ class _CookiePageState extends State<CookiePage> {
           path: '/anything'),
     );
 
-    await _webViewController.loadUrl('https://httpbin.org/anything');
-
     setState(() {
       cookies = 'Cookies included';
     });
@@ -147,10 +134,12 @@ class _CookiePageState extends State<CookiePage> {
   /// Retorna os cookies registrados na pagina web
   void _getCookies() async {
     await _webViewController
-        .runJavascriptReturningResult('document.cookie')
+        .runJavaScriptReturningResult('document.cookie')
         .then((value) {
       setState(() {
-        cookies = value.isNotEmpty ? value : 'No cookies included';
+        cookies = value.toString().isNotEmpty
+            ? value.toString()
+            : 'No cookies included';
       });
     });
   }
@@ -158,8 +147,6 @@ class _CookiePageState extends State<CookiePage> {
   /// Limpa os cookies registrados na página web
   void _clearCookies() async {
     await _cookieManager.clearCookies();
-
-    await _webViewController.loadUrl('https://httpbin.org/anything');
 
     setState(() {
       cookies = 'No cookies included';

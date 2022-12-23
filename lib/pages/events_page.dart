@@ -22,12 +22,13 @@ class _EventsPageState extends State<EventsPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: _showContent(),
+          child: Container(), //_showContent(),
         ),
       ),
     );
   }
 
+/*
   /// Mostra o conteúdio da página
   Widget _showContent() {
     return Column(
@@ -95,4 +96,5 @@ class _EventsPageState extends State<EventsPage> {
       },
     );
   }
+  */
 }
