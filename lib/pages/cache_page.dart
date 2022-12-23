@@ -112,7 +112,7 @@ class _CachePageState extends State<CachePage> {
           });
         },
       )
-      ..loadRequest(uri);
+      ..loadRequest(uri, method: LoadRequestMethod.get);
 
     return WebViewWidget(controller: _webViewController);
   }
@@ -127,6 +127,7 @@ class _CachePageState extends State<CachePage> {
         localStorage.setItem("key_4", "persistent cache 4");
       ''',
     );
+
     setState(() {
       _storage = 'Cache included';
     });

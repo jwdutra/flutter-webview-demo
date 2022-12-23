@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PostmessagePage extends StatefulWidget {
@@ -26,13 +23,12 @@ class _PostmessagePageState extends State<PostmessagePage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(), //_showContent(),
+          child: _showContent(),
         ),
       ),
     );
   }
 
-/*
   /// Mostra o conteúdio da página
   Widget _showContent() {
     return Column(
@@ -67,40 +63,24 @@ class _PostmessagePageState extends State<PostmessagePage> {
   /// Configura e inclui o webview na página e configura o canal de comunicação entre a
   /// página web e o aplicativo
   Widget _buildWebView() {
-    return WebView(
-      initialUrl: 'about:blank',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) async {
-        _webViewController = webViewController;
-        String fileContent =
-            await rootBundle.loadString('assets/html/postmessage.html');
-        _webViewController.loadUrl(
-          Uri.dataFromString(
-            fileContent,
-            mimeType: 'text/html',
-            encoding: Encoding.getByName('utf-8'),
-          ).toString(),
-        );
-      },
-      javascriptChannels: <JavascriptChannel>{
-        JavascriptChannel(
-          name: 'messageHandler',
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'messageHandler',
+        onMessageReceived: (JavaScriptMessage message) {
+          /// Recebe e mostra mensagen vinda da web através do canal
+          setState(() {
+            mensagemRetorno = message.message;
+          });
 
-          /// Nome do canal
-          onMessageReceived: (JavascriptMessage message) {
-            /// Recebe e mostra mensagen vinda da web através do canal
-            setState(() {
-              mensagemRetorno = message.message;
-            });
+          /// Retorna a mensagem recebida pelo canal à web via javascript manipulando o DOM para ser mostrada
+          final script =
+              "document.getElementById('switch-value').innerText=\"${message.message}\"";
+          _webViewController.runJavaScript(script);
+        },
+      )
+      ..loadFlutterAsset('assets/html/postmessage.html');
 
-            /// Retorna a mensagem recebida pelo canal à web via javascript manipulando o DOM para ser mostrada
-            final script =
-                "document.getElementById('switch-value').innerText=\"${message.message}\"";
-            _webViewController.runJavascript(script);
-          },
-        )
-      },
-    );
+    return WebViewWidget(controller: _webViewController);
   }
-  */
 }

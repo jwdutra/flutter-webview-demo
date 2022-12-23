@@ -14,6 +14,11 @@ class _EventsPageState extends State<EventsPage> {
   /// Eventos que serão mostrados na tela apresentando sua sincronicidade
   var events = '';
 
+  /// Controlador do webview
+  late WebViewController _webViewController;
+
+  final uri = Uri.parse('https://www.guide.com.br');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,13 +27,12 @@ class _EventsPageState extends State<EventsPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(), //_showContent(),
+          child: _showContent(),
         ),
       ),
     );
   }
 
-/*
   /// Mostra o conteúdio da página
   Widget _showContent() {
     return Column(
@@ -63,6 +67,50 @@ class _EventsPageState extends State<EventsPage> {
 
   /// Configura e inclui o webview na página e configura os events, mostrando a sincronicidade de cada evento
   Widget _buildWebView() {
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            //setState(() {
+            events = "$events \n - onProgress $progress";
+            inspect(events);
+            //});
+          },
+          onPageStarted: (String url) {
+            //setState(() {
+            //events = '';
+
+            events = "$events \n - onPageStarted:\n"
+                "Ocorre a página web começa a ser carregada.\n";
+            //});
+            inspect(events);
+          },
+          onPageFinished: (String url) {
+            //setState(() {
+            events = "$events \n\n - onPageFinished:\n"
+                "Ocorre a página web termina de ser carregada.\n";
+            //});
+            inspect(events);
+          },
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            //setState(() {
+
+            //events = "$events \n\n - onNavigationRequest:\n"
+            //    "Ocorre a página web termina de ser carregada.\n";
+            //});
+            //inspect(events);
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(uri, method: LoadRequestMethod.get);
+
+    return WebViewWidget(controller: _webViewController);
+
+/*
+
     return WebView(
       initialUrl: 'https://www.guide.com.br',
       javascriptMode: JavascriptMode.unrestricted,
@@ -95,6 +143,7 @@ class _EventsPageState extends State<EventsPage> {
         inspect(error);
       },
     );
+
+    */
   }
-  */
 }

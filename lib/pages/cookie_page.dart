@@ -102,7 +102,7 @@ class _CookiePageState extends State<CookiePage> {
   WebViewWidget _buildWebView() {
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(uri);
+      ..loadRequest(uri, method: LoadRequestMethod.get);
 
     return WebViewWidget(controller: _webViewController);
   }
@@ -126,6 +126,8 @@ class _CookiePageState extends State<CookiePage> {
           path: '/anything'),
     );
 
+    _webViewController.reload();
+
     setState(() {
       cookies = 'Cookies included';
     });
@@ -147,6 +149,8 @@ class _CookiePageState extends State<CookiePage> {
   /// Limpa os cookies registrados na página web
   void _clearCookies() async {
     await _cookieManager.clearCookies();
+
+    _webViewController.reload();
 
     setState(() {
       cookies = 'No cookies included';
