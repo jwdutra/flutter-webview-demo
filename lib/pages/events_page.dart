@@ -1,10 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../controllers/events_controller.dart';
+
 class EventsPage extends StatefulWidget {
-  const EventsPage({super.key});
+  EventsPage({super.key});
+
+  /// Controller de gestão de estado para mostrar os eventos
+  final EventsController controller = EventsController();
 
   @override
   State<EventsPage> createState() => _EventsPageState();
@@ -57,10 +60,14 @@ class _EventsPageState extends State<EventsPage> {
           child: _buildWebView(),
         ),
         const SizedBox(height: 10.0),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text(events),
-        ),
+        AnimatedBuilder(
+            animation: widget.controller,
+            builder: (context, _) {
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(events),
+              );
+            })
       ],
     );
   }
@@ -72,78 +79,28 @@ class _EventsPageState extends State<EventsPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            //setState(() {
             events = "$events \n - onProgress $progress";
-            inspect(events);
-            //});
+            widget.controller.setEvents(events);
           },
           onPageStarted: (String url) {
-            //setState(() {
-            //events = '';
-
-            events = "$events \n - onPageStarted:\n"
-                "Ocorre a página web começa a ser carregada.\n";
-            //});
-            inspect(events);
+            events = "$events \n\n - onPageStarted:\n"
+                "Ocorre quando a página web começa a ser carregada.\n";
+            widget.controller.setEvents(events);
           },
           onPageFinished: (String url) {
-            //setState(() {
             events = "$events \n\n - onPageFinished:\n"
-                "Ocorre a página web termina de ser carregada.\n";
-            //});
-            inspect(events);
+                "Ocorre quando a página web termina de ser carregada.\n";
+            widget.controller.setEvents(events);
           },
-          onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            //setState(() {
-
-            //events = "$events \n\n - onNavigationRequest:\n"
-            //    "Ocorre a página web termina de ser carregada.\n";
-            //});
-            //inspect(events);
-            return NavigationDecision.navigate;
+          onWebResourceError: (WebResourceError error) {
+            events = "$events \n\n - onPageFinished:\n"
+                "Ocorre quando acontece algum erro no webview.\n $error 'n";
+            widget.controller.setEvents(events);
           },
         ),
       )
       ..loadRequest(uri, method: LoadRequestMethod.get);
 
     return WebViewWidget(controller: _webViewController);
-
-/*
-
-    return WebView(
-      initialUrl: 'https://www.guide.com.br',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) async {
-        events = '';
-
-        setState(() {
-          events = " - onWebViewCreated:\n"
-              "Ocorre quando o webview é instanciado e fica pronto para receber uma página web.\n";
-        });
-      },
-      onPageStarted: (url) {
-        setState(() {
-          events = "$events \n\n - onPageStarted:\n"
-              "Ocorre a página web começa a ser carregada.\n";
-        });
-      },
-      onProgress: (progress) {
-        setState(() {
-          events = "$events \n - onProgress $progress";
-        });
-      },
-      onPageFinished: (url) {
-        setState(() {
-          events = "$events \n\n - onPageFinished:\n"
-              "Ocorre a página web termina de ser carregada.\n";
-        });
-      },
-      onWebResourceError: (error) {
-        inspect(error);
-      },
-    );
-
-    */
   }
 }
