@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'cache_page.dart';
 import 'events_page.dart';
 import 'postmessage_page.dart';
-import 'teste_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,7 +31,7 @@ class HomePage extends StatelessWidget {
           const Text(
               'Esta demostração visa apresentar as várias maneiras que um aplicativo flutter '
               'pode interagir com uma página web incluída em um WebView.'),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text('Incluíndo, lendo e excluíndo cookies em uma página web.'),
           ElevatedButton(
             style: styleButton,
@@ -40,11 +39,11 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CookiePage()),
+                MaterialPageRoute(builder: (context) => CookiePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
               'Manipulando o DOM e recebendo informaçõe de uuma página web através de javscript channel.'),
           ElevatedButton(
@@ -53,12 +52,11 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const PostmessagePage()),
+                MaterialPageRoute(builder: (context) => PostmessagePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
               'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.'),
           ElevatedButton(
@@ -67,11 +65,11 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CachePage()),
+                MaterialPageRoute(builder: (context) => CachePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
               'Sequência de eventos que acontecem quando uma página é incluída em um webview.'),
           ElevatedButton(
@@ -84,23 +82,12 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            style: styleButton,
-            child: const Text('Teste'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WebViewExample()),
-              );
-            },
-          ),
         ],
       ),
     );
   }
 
   static final styleButton = ElevatedButton.styleFrom(
-    minimumSize: const Size.fromHeight(50),
+    minimumSize: const Size.fromHeight(50.0),
   );
 }

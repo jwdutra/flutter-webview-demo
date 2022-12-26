@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class PostmessagePage extends StatefulWidget {
-  const PostmessagePage({super.key});
+import '../controllers/events_controller.dart';
 
-  @override
-  State<PostmessagePage> createState() => _PostmessagePageState();
-}
+// ignore: must_be_immutable
+class PostmessagePage extends StatelessWidget {
+  PostmessagePage({super.key});
 
-class _PostmessagePageState extends State<PostmessagePage> {
   /// Controlador do webview
   late WebViewController _webViewController;
 
-// Mensagem de retorno recebida pelo javascripr channel
-  var mensagemRetorno = '';
+  /// Controller de gestão de estado para mostrar os eventos
+  final EventsController controller = EventsController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +32,20 @@ class _PostmessagePageState extends State<PostmessagePage> {
     return Column(
       children: [
         Container(
-          height: 200,
+          height: 200.0,
           width: double.infinity,
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
               const Text('Página Flutter'),
               const SizedBox(height: 20.0),
-              Text('Mensagem recebida da WebView = $mensagemRetorno'),
+              AnimatedBuilder(
+                animation: controller,
+                builder: (_, __) {
+                  return Text(
+                      'Mensagem recebida da WebView = ${controller.messages}');
+                },
+              ),
               const SizedBox(height: 20.0),
               const Text(
                   'Ao ligar ou desligar o Switch na página web, uma mensagem do estado do switch é enviada '
@@ -51,7 +55,7 @@ class _PostmessagePageState extends State<PostmessagePage> {
           ),
         ),
         Container(
-          height: 300,
+          height: 300.0,
           color: Colors.grey.withOpacity(0.5),
           padding: const EdgeInsets.all(20.0),
           child: _buildWebView(),
@@ -69,9 +73,7 @@ class _PostmessagePageState extends State<PostmessagePage> {
         'messageHandler',
         onMessageReceived: (JavaScriptMessage message) {
           /// Recebe e mostra mensagen vinda da web através do canal
-          setState(() {
-            mensagemRetorno = message.message;
-          });
+          controller.setMessage(message.message);
 
           /// Retorna a mensagem recebida pelo canal à web via javascript manipulando o DOM para ser mostrada
           final script =

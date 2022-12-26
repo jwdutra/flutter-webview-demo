@@ -3,23 +3,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../controllers/events_controller.dart';
 
-class EventsPage extends StatefulWidget {
+// ignore: must_be_immutable
+class EventsPage extends StatelessWidget {
   EventsPage({super.key});
 
   /// Controller de gestão de estado para mostrar os eventos
   final EventsController controller = EventsController();
 
-  @override
-  State<EventsPage> createState() => _EventsPageState();
-}
-
-class _EventsPageState extends State<EventsPage> {
   /// Eventos que serão mostrados na tela apresentando sua sincronicidade
-  var events = '';
+  var _events = '';
 
-  /// Controlador do webview
-  late WebViewController _webViewController;
-
+  /// URI da página a ser aberta no webview
   final uri = Uri.parse('https://www.guide.com.br');
 
   @override
@@ -41,7 +35,7 @@ class _EventsPageState extends State<EventsPage> {
     return Column(
       children: [
         Container(
-          height: 130,
+          height: 130.0,
           width: double.infinity,
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -54,53 +48,54 @@ class _EventsPageState extends State<EventsPage> {
           ),
         ),
         Container(
-          height: 250,
+          height: 250.0,
           color: Colors.grey.withOpacity(0.5),
           padding: const EdgeInsets.all(20.0),
           child: _buildWebView(),
         ),
         const SizedBox(height: 10.0),
         AnimatedBuilder(
-            animation: widget.controller,
-            builder: (context, _) {
-              return Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(events),
-              );
-            })
+          animation: controller,
+          builder: (context, _) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(_events),
+            );
+          },
+        )
       ],
     );
   }
 
   /// Configura e inclui o webview na página e configura os events, mostrando a sincronicidade de cada evento
   Widget _buildWebView() {
-    _webViewController = WebViewController()
+    final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
-            events = "$events \n - onProgress $progress";
-            widget.controller.setEvents(events);
+            _events = "$_events \n - onProgress $progress";
+            controller.setEvents(_events);
           },
           onPageStarted: (String url) {
-            events = "$events \n\n - onPageStarted:\n"
+            _events = "$_events \n\n - onPageStarted:\n"
                 "Ocorre quando a página web começa a ser carregada.\n";
-            widget.controller.setEvents(events);
+            controller.setEvents(_events);
           },
           onPageFinished: (String url) {
-            events = "$events \n\n - onPageFinished:\n"
+            _events = "$_events \n\n - onPageFinished:\n"
                 "Ocorre quando a página web termina de ser carregada.\n";
-            widget.controller.setEvents(events);
+            controller.setEvents(_events);
           },
           onWebResourceError: (WebResourceError error) {
-            events = "$events \n\n - onPageFinished:\n"
+            _events = "$_events \n\n - onPageFinished:\n"
                 "Ocorre quando acontece algum erro no webview.\n $error 'n";
-            widget.controller.setEvents(events);
+            controller.setEvents(_events);
           },
         ),
       )
       ..loadRequest(uri, method: LoadRequestMethod.get);
 
-    return WebViewWidget(controller: _webViewController);
+    return WebViewWidget(controller: webViewController);
   }
 }

@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class CookiePage extends StatefulWidget {
-  const CookiePage({super.key});
+import '../controllers/events_controller.dart';
 
-  @override
-  State<CookiePage> createState() => _CookiePageState();
-}
+// ignore: must_be_immutable
+class CookiePage extends StatelessWidget {
+  CookiePage({super.key});
 
-class _CookiePageState extends State<CookiePage> {
   /// Controlador do webview
   late WebViewController _webViewController;
 
   /// Controller de cookies
   final _cookieManager = WebViewCookieManager();
 
-  /// Dados do cookie a ser recebido  em [_getCookies]
-  var cookies = '';
+  /// Controller de gestão de estado para mostrar os eventos
+  final EventsController controller = EventsController();
 
   /// Url da página onde os cookies serão gerenciados
   final uri = Uri.parse('https://httpbin.org/anything');
@@ -45,12 +43,12 @@ class _CookiePageState extends State<CookiePage> {
               Text('Incluíndo, lendo e excluíndo cookies em uma página web.'),
         ),
         SizedBox(
-          height: 140,
+          height: 140.0,
           width: double.infinity,
           child: _buttons(),
         ),
         Container(
-          height: 200,
+          height: 200.0,
           color: Colors.grey.withOpacity(0.5),
           padding: const EdgeInsets.all(20.0),
           child: _buildWebView(),
@@ -58,10 +56,15 @@ class _CookiePageState extends State<CookiePage> {
         const SizedBox(height: 30.0),
         const Text('Cookies:'),
         const SizedBox(height: 30.0),
-        Text(
-          cookies,
-          textAlign: TextAlign.center,
-        ),
+        AnimatedBuilder(
+          animation: controller,
+          builder: (_, __) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(controller.cookies),
+            );
+          },
+        )
       ],
     );
   }
@@ -128,9 +131,7 @@ class _CookiePageState extends State<CookiePage> {
 
     _webViewController.reload();
 
-    setState(() {
-      cookies = 'Cookies included';
-    });
+    controller.setCookies('Cookies included');
   }
 
   /// Retorna os cookies registrados na pagina web
@@ -138,11 +139,9 @@ class _CookiePageState extends State<CookiePage> {
     await _webViewController
         .runJavaScriptReturningResult('document.cookie')
         .then((value) {
-      setState(() {
-        cookies = value.toString().isNotEmpty
-            ? value.toString()
-            : 'No cookies included';
-      });
+      controller.setCookies(value.toString().isNotEmpty
+          ? value.toString()
+          : 'No cookies included');
     });
   }
 
@@ -152,8 +151,6 @@ class _CookiePageState extends State<CookiePage> {
 
     _webViewController.reload();
 
-    setState(() {
-      cookies = 'No cookies included';
-    });
+    controller.setCookies('No cookies included');
   }
 }
