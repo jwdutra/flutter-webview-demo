@@ -37,7 +37,8 @@ class CachePage extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(
-              'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.'),
+            'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.',
+          ),
         ),
         SizedBox(
           height: 140.0,
@@ -61,7 +62,7 @@ class CachePage extends StatelessWidget {
               child: Text(controller.storages),
             );
           },
-        )
+        ),
       ],
     );
   }
@@ -100,7 +101,8 @@ class CachePage extends StatelessWidget {
         'messageHandler',
         onMessageReceived: (JavaScriptMessage message) {
           controller.setStorage(
-              message.message != '{}' ? message.message : 'No cache included');
+            message.message != '{}' ? message.message : 'No cache included',
+          );
         },
       )
       ..setNavigationDelegate(

@@ -43,14 +43,16 @@ class PostmessagePage extends StatelessWidget {
                 animation: controller,
                 builder: (_, __) {
                   return Text(
-                      'Mensagem recebida da WebView = ${controller.messages}');
+                    'Mensagem recebida da WebView = ${controller.messages}',
+                  );
                 },
               ),
               const SizedBox(height: 20.0),
               const Text(
-                  'Ao ligar ou desligar o Switch na página web, uma mensagem do estado do switch é enviada '
-                  'ao app e mostrada, e imediatamente, esta mesma mensagem é enviada à web manipulando o DOM e '
-                  'mostrando a mesma mensagem.'),
+                'Ao ligar ou desligar o Switch na página web, uma mensagem do estado do switch é enviada '
+                'ao app e mostrada, e imediatamente, esta mesma mensagem é enviada à web manipulando o DOM e '
+                'mostrando a mesma mensagem.',
+              ),
             ],
           ),
         ),

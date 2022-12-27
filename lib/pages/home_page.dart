@@ -29,8 +29,9 @@ class HomePage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           const Text(
-              'Esta demostração visa apresentar as várias maneiras que um aplicativo flutter '
-              'pode interagir com uma página web incluída em um WebView.'),
+            'Esta demostração visa apresentar as várias maneiras que um aplicativo flutter '
+            'pode interagir com uma página web incluída em um WebView.',
+          ),
           const SizedBox(height: 20.0),
           const Text('Incluíndo, lendo e excluíndo cookies em uma página web.'),
           ElevatedButton(
@@ -45,7 +46,8 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           const Text(
-              'Manipulando o DOM e recebendo informaçõe de uuma página web através de javscript channel.'),
+            'Manipulando o DOM e recebendo informaçõe de uuma página web através de javscript channel.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Javascript Channel'),
@@ -58,7 +60,8 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           const Text(
-              'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.'),
+            'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Cache Storage'),
@@ -71,7 +74,8 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           const Text(
-              'Sequência de eventos que acontecem quando uma página é incluída em um webview.'),
+            'Sequência de eventos que acontecem quando uma página é incluída em um webview.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Events'),

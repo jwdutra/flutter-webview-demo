@@ -43,7 +43,8 @@ class EventsPage extends StatelessWidget {
               Text('Página Flutter'),
               SizedBox(height: 20.0),
               Text(
-                  'Sequência dos eventos que acontecem enquanto uma página é incluída no webview '),
+                'Sequência dos eventos que acontecem enquanto uma página é incluída no webview ',
+              ),
             ],
           ),
         ),
@@ -62,7 +63,7 @@ class EventsPage extends StatelessWidget {
               child: Text(_events),
             );
           },
-        )
+        ),
       ],
     );
   }

@@ -64,7 +64,7 @@ class CookiePage extends StatelessWidget {
               child: Text(controller.cookies),
             );
           },
-        )
+        ),
       ],
     );
   }
@@ -116,17 +116,19 @@ class CookiePage extends StatelessWidget {
 
     await _cookieManager.setCookie(
       const WebViewCookie(
-          name: 'cookie_test_1',
-          value: 'value_cookie_1',
-          domain: 'httpbin.org',
-          path: '/anything'),
+        name: 'cookie_test_1',
+        value: 'value_cookie_1',
+        domain: 'httpbin.org',
+        path: '/anything',
+      ),
     );
     await _cookieManager.setCookie(
       const WebViewCookie(
-          name: 'cookie_test_2',
-          value: 'value_cookie_2',
-          domain: 'httpbin.org',
-          path: '/anything'),
+        name: 'cookie_test_2',
+        value: 'value_cookie_2',
+        domain: 'httpbin.org',
+        path: '/anything',
+      ),
     );
 
     _webViewController.reload();
