@@ -124,15 +124,17 @@ class CachePage extends StatelessWidget {
             ''');
   }
 
-  /// Adicina dados em sessionStorage e localStorage na página web
+  /// Registra e obtem dados em sessionStorage e localStorage na página web
   Future<void> _setCache() async {
     await _webViewController.runJavaScript(
       '''
+        // Registrando no cache
         sessionStorage.setItem("key_1", "session cache 1"); 
         sessionStorage.setItem("key_2", "session cache 2");
         localStorage.setItem("key_3", "persistent cache 3");  
         localStorage.setItem("key_4", "persistent cache 4");
 
+        // Obtendo dados do cache
         var storage = {};
         Object.keys(sessionStorage).forEach((key) => {
           storage[key] = sessionStorage.getItem(key);
@@ -141,6 +143,8 @@ class CachePage extends StatelessWidget {
           storage[key] = localStorage[key];
         });
         document.getElementById('teste').innerHTML = JSON.stringify(storage);
+
+        // Retornando dados via canal Javascript 
         messageHandler.postMessage(JSON.stringify(storage));
       ''',
     );
@@ -148,7 +152,6 @@ class CachePage extends StatelessWidget {
 
   /// Limpa os dados do cache storage da página web.
   void _clearCache() async {
-    await _webViewController.clearCache();
     await _webViewController.clearLocalStorage();
 
     await _webViewController.runJavaScript(

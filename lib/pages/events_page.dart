@@ -68,7 +68,8 @@ class EventsPage extends StatelessWidget {
     );
   }
 
-  /// Configura e inclui o webview na página e configura os events, mostrando a sincronicidade de cada evento
+  /// Configura e inclui o webview na página e configura os events,
+  /// mostrando a sincronicidade de cada evento
   Widget _buildWebView() {
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)

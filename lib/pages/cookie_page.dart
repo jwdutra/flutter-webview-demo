@@ -10,7 +10,7 @@ class CookiePage extends StatelessWidget {
   /// Controlador do webview
   late WebViewController _webViewController;
 
-  /// Controller de cookies
+  /// Gerenciador de Cookies
   final _cookieManager = WebViewCookieManager();
 
   /// Controller de gestão de estado para mostrar os eventos

@@ -77,7 +77,8 @@ class PostmessagePage extends StatelessWidget {
           /// Recebe e mostra mensagen vinda da web através do canal
           controller.setMessage(message.message);
 
-          /// Retorna a mensagem recebida pelo canal à web via javascript manipulando o DOM para ser mostrada
+          /// Retorna a mensagem recebida pelo canal à web via javascript manipulando
+          /// o DOM para ser mostrada
           final script =
               "document.getElementById('switch-value').innerText=\"${message.message}\"";
           _webViewController.runJavaScript(script);
