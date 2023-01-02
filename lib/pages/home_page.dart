@@ -29,9 +29,10 @@ class HomePage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           const Text(
-              'Esta demostração visa apresentar as várias maneiras que um aplicativo flutter '
-              'pode interagir com uma página web incluída em um WebView.'),
-          const SizedBox(height: 20),
+            'Esta demostração visa apresentar as várias maneiras que um aplicativo flutter '
+            'pode interagir com uma página web incluída em um WebView.',
+          ),
+          const SizedBox(height: 20.0),
           const Text('Incluíndo, lendo e excluíndo cookies em uma página web.'),
           ElevatedButton(
             style: styleButton,
@@ -39,47 +40,49 @@ class HomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CookiePage()),
+                MaterialPageRoute(builder: (context) => CookiePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
-              'Manipulando o DOM e recebendo informaçõe de uuma página web através de javscript channel.'),
+            'Manipulando o DOM e recebendo informaçõe de uuma página web através de javscript channel.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Javascript Channel'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const PostmessagePage()),
+                MaterialPageRoute(builder: (context) => PostmessagePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
-              'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.'),
+            'Incluíndo lendo e excluíndo informações em localStorage e sessionStorage na página web.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Cache Storage'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CachePage()),
+                MaterialPageRoute(builder: (context) => CachePage()),
               );
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 20.0),
           const Text(
-              'Sequência de eventos que acontecem quando uma página é incluída em um webview.'),
+            'Sequência de eventos que acontecem quando uma página é incluída em um webview.',
+          ),
           ElevatedButton(
             style: styleButton,
             child: const Text('Events'),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const EventsPage()),
+                MaterialPageRoute(builder: (context) => EventsPage()),
               );
             },
           ),
@@ -89,6 +92,6 @@ class HomePage extends StatelessWidget {
   }
 
   static final styleButton = ElevatedButton.styleFrom(
-    minimumSize: const Size.fromHeight(50),
+    minimumSize: const Size.fromHeight(50.0),
   );
 }
