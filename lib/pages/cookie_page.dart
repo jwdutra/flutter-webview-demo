@@ -45,12 +45,12 @@ class _CookiePageState extends State<CookiePage> {
               Text('Incluíndo, lendo e excluíndo cookies em uma página web.'),
         ),
         SizedBox(
-          height: 140,
+          height: 140.0,
           width: double.infinity,
           child: _buttons(),
         ),
         Container(
-          height: 200,
+          height: 200.0,
           color: Colors.grey.withOpacity(0.5),
           padding: const EdgeInsets.all(20.0),
           child: _buildWebView(),
